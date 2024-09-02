@@ -1,0 +1,330 @@
+<html>
+
+<head>
+    <script src="https://kit.fontawesome.com/6700fb65a7.js" crossorigin="anonymous"></script>
+    <title>Music Player</title>
+</head>
+
+<body>
+    <div class="main-class col-10 display-flex align-item-center text-center margin-auto space-around">
+        <div class="col-4 music-playing-class">
+            <div class="title-class col-12 display-flex space-between">
+                <i class="fa-solid fa-chevron-down"></i>
+                <p>Now Playing</p>
+                <i class="fa-solid fa-ellipsis"></i>
+            </div>
+
+            <div>
+                <img src="crazy.jpg" alt="song" class="image-class col-11" id="songImg">
+
+                <div class="col-11 singer-song-name">
+                    <p style="font-size: x-large;" id="songName">Beauz & Jvna - Crazy</p>
+                    <br>
+                    <p style="font-size: large;" id="singerName">NCS Release</p>
+                </div>
+
+                <div class="col-11 music-player">
+                    <input type="range" value="0" min="0" max="100" id="progressBar">
+                    <div class="col-12 display-flex space-between" style="margin-top: 3%;">
+                        <p class="current-time">00:00</p>
+                        <p id="songTime" class="max-duration">00:00</p>
+                        <audio controls hidden id="myAudio">
+                            <source src="" type="audio/mp3" id="myAudioSrc">
+                        </audio>        
+                    </div>
+                </div>
+
+                <div class="col-11 music-player-buttons display-flex space-between">
+                    <i class="fa-sharp fa-solid fa-repeat" style="font-size: 25px; margin-top: 4%;" id="goNext" onclick="goNextFunction()"></i>
+                    <i class="fa-solid fa-arrows-left-right-to-line" style="display: none; font-size: 25px; margin-top: 4%;" id="repeat" onclick="repeatFunction()"></i>
+                    <i class="fa-solid fa-shuffle" style="display: none; font-size: 25px; margin-top: 4%;" id="shuffle" onclick="shuffleFunction()"></i>
+                    <i class="fa-solid fa-forward-step" style="transform: rotate(180deg);" onclick="lastSongFunction()"></i>
+                    <i class="fa-solid fa-circle-play" id="playBtn" onclick="playSongFunction()"></i>
+                    <i class="fa-solid fa-circle-pause" style="display: none;" id="pauseBtn" onclick="pauseSongFunction()"></i>
+                    <i class="fa-solid fa-forward-step" onclick="nextSongFunction()"></i>
+                    <i class="fa-solid fa-music" style="font-size: 25px; margin-top: 4%;" onclick="songsListFunction()"></i>
+                </div>
+            </div>
+
+            <div class="col-12 music-list-class" id="songsList">
+                <div class="title-list-class col-12 display-flex space-between">
+                    <div class="display-flex">
+                        <i class="fa-solid fa-music"></i>
+                        <p>Music List</p>
+                    </div>
+                    <i class="fa-solid fa-xmark" onclick="closeListFunction()"></i>
+                </div>
+
+                <div id="musicList" class="col-12"></div>
+            </div>
+        </div>
+</body>
+
+<style>
+    * {
+        margin: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .display-flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .align-item-center {
+        align-items: center;
+    }
+
+    .space-between {
+        justify-content: space-between;
+    }
+
+    .space-around {
+        justify-content: space-around;
+    }
+
+    .flex-column {
+        flex-direction: column;
+    }
+
+    .margin-auto {
+        margin: auto;
+    }
+
+    .main-class {
+        border: 1px solid rgb(225, 0, 255);
+        border-radius: 5px;
+        background-color: rgb(255, 46, 231);
+        background-image: linear-gradient(rgb(255, 46, 231), rgb(116, 0, 159));
+        margin: 10%;
+        padding: 20px;
+    }
+
+    .music-playing-class {
+        border: 1px solid rgb(255, 246, 230);
+        border-radius: 10px;
+        background-color: rgb(255, 246, 230);
+        margin: 5%;
+        padding: 20px;
+        position: relative;
+    }
+
+    .title-class {
+        margin-bottom: 5%;
+    }
+
+    .title-class i , p {
+        color: rgb(84, 84, 84);
+        font-weight: bold;
+        font-size: x-large;
+    }
+
+    .title-class i:hover {
+        cursor: pointer;
+    }
+
+    .image-class {
+        height: 220px;
+        border-radius: 10px;
+        margin: 5%;
+    }
+
+    .singer-song-name {
+        margin: 5%;
+    }
+
+    .singer-song-name p {
+        color: rgb(84, 84, 84);
+        font-weight: bold;
+    }
+
+    .music-player {
+        margin: 10% 5% 10% 5%;
+    }
+
+    .music-player input {
+        width: 330px;
+        height: 7px;
+
+        -webkit-appearance: none;
+        outline: none;
+        background: linear-gradient(90deg, rgb(250, 194, 255) , rgb(250, 194, 255) 100%);    /*linear-gradient(to right, rgb(250, 200, 255) 0%, rgb(250, 200, 255) 100%)*/
+        border: solid 1px rgb(248, 172, 255);
+        border-radius: 8px;
+    }
+
+    .music-player input::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 25px;
+        height: 25px;
+        outline: none;
+        transition: 1s ease-in-out;
+        border-radius: 15px;
+        border: 5px solid rgb(248, 172, 255);
+        background: linear-gradient(rgb(255, 46, 231), rgb(116, 0, 159));
+    }
+
+    /*.music-player input::-webkit-slider-value {
+        width: 330px;
+        height: 7px;
+
+        -webkit-appearance: none;
+        outline: none;
+        border: solid 1px rgb(255, 46, 231);
+        border-radius: 8px;
+        background: rgb(255, 46, 231);
+        background-image: linear-gradient(rgb(255, 46, 231), rgb(116, 0, 159));
+    }*/
+
+
+    .music-player input:hover {
+        cursor: pointer;
+    }
+
+    .music-player p {
+        font-size: medium;
+        font-weight: bold;
+        color: rgb(84, 84, 84);
+    }
+
+    .music-player-buttons {
+        margin: 5%;
+    }
+
+    .music-player-buttons i {
+        font-size: 45px;
+        background-color: rgb(255, 46, 231);
+        background-image: linear-gradient(rgb(255, 46, 231), rgb(116, 0, 159));
+        padding: 10px;
+        border-radius: 10px;
+
+        background-size: 100%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent; 
+        background-clip: text;
+        -moz-text-fill-color: transparent;
+    }
+
+    .music-player-buttons i:hover {
+        cursor: pointer;
+    }
+
+
+    @keyframes anim1 {
+        0% {height: 0;}
+        100% {height: 300px;}
+    }
+      
+
+    .music-list-class {
+        border: 1px solid rgb(212, 0, 231);
+        border-radius: 10px;
+        background-color: rgb(248, 167, 255);
+        padding: 20px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        height: 300px;
+        overflow: hidden;
+        display: none;
+        animation-name: anim1;
+        animation-direction: alternate;
+        animation-duration: 1s;
+                
+        /*transition: all 1s linear;*/
+    }
+
+    .music-list-class:hover {
+        overflow-y: scroll;
+        scroll-behavior: smooth;
+        transition: 1s;
+    }
+
+    .title-list-class i , p {
+        font-size: large;
+        font-weight: bold;
+        color: rgb(62, 62, 62);
+    }
+
+    .title-list-class i,p:hover {
+        cursor: pointer;
+    }
+
+    .title-list-class p {
+        margin-left: 10px;
+    }
+
+    .music-list-item {
+        margin: 10% 0 10% 0;
+        border-bottom: 1px solid rgb(62, 62, 62);
+        padding-bottom: 10px;
+    }
+
+
+
+
+
+
+
+    .col-1 {
+        width: 8.33%;
+    }
+
+    .col-2 {
+        width: 16.66%;
+    }
+
+    .col-3 {
+        width: 25%;
+    }
+
+    .col-4 {
+        width: 33.33%;
+    }
+
+    .col-5 {
+        width: 41.66%;
+    }
+
+    .col-6 {
+        width: 50%;
+    }
+
+    .col-7 {
+        width: 58.33%;
+    }
+
+    .col-8 {
+        width: 66.66%;
+    }
+
+    .col-9 {
+        width: 75%;
+    }
+
+    .col-10 {
+        width: 83.33%;
+    }
+
+    .col-11 {
+        width: 91.66%;
+    }
+
+    .col-12 {
+        width: 100%;
+    }
+</style>
+<script src="script.js"></script>
+
+</html>
